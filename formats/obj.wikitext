@@ -1,0 +1,7 @@
+<!---
+ - @name Wavefront OBJ
+ - @extension .obj
+ - @slugs Wavefront_OBJ OBJ
+ --->
+
+Wavefront OBJ stuff goes here.

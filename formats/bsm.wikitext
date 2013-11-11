@@ -1,0 +1,198 @@
+<!---
+ - @name Binary Static Mesh
+ - @extension .bsm
+ - @slugs Binary_Static_Mesh BSM
+ --->
+
+Binary Static Mesh is a file format designed for storing static meshes in an easy and fast format. It was designed by Facepunch user ROBO_DONUT as an easy to use alternative to [[Wavefront_OBJ]].
+
+The BSM format is currently in the draft stage of version 1. However, all versions of the format must be backwards compatible with previous versions - a version 1 parser will still be able to read version 1 information from a version 2 file, if a second version is created.
+
+== Format ==
+All BSM files include the following data (though not neccesarily in this order):
+<pre>
+Header
+Bounding Sphere
+Bounding Box
+Vertex positions
+Vertex texture coordinates
+Vertex normals
+Vertex tangents
+Indices (as triangles)
+Meshes
+Convex hulls
+Convex hull vertices
+Occlusion mesh vertices
+Occlusion mesh triangles
+</pre>
+
+Convex hull and occlusion mesh information is contained in every file, however, there may be zero meshes or hulls actually in the file. In this way, convex hulls and occlusion meshes are effectively optional.
+
+=== Header ===
+The header is at the beginning of every BSM file. It contains the following data:
+<pre lang="c">
+struct bsm_header 
+{
+	char[16] magic;         // Magic number - 'BINARYSTATICMESH'
+	int version;            // Format version - should be '1'
+	int extensionID;        // See section "Extending"
+	bsphere boundingSphere; // Bounding sphere (see blow)
+	bbox boundingBox;		// Bounding box (see below)
+	int numVertices;		// Number of vertices.
+	int worldOffset;        // Offset of vertex world coordinate data.
+	int texOffset;			// Offset of texture coordinate data.
+	int normalOffset;       // Offset of vertex normal data.
+	int tangentOffset;		// Offset of vertex tangent data.
+	int numTriangles;		// Number of triangles.
+	int triOffset;			// Offset of triangle data.
+	int numMeshes;			// Number of meshes.
+	int meshOffset;			// Offset of mesh array.
+	int numCollisionVerts;  // Number of convex hull vertices.
+	int collisionOffset;	// Offset of convex hull vertex data.
+	int numConvexHulls;		// Number of convex hulls.
+	int convexHullOffset;	// Offset of convex hull data.
+	int numOccVerts;  		// Number of occlusion mesh vertices.
+	int occVertOffset;		// Offset of occlusion mesh vertex data.
+	int numOccTriangles;	// Number of occlusion mesh triangles.
+	int occTriangleOffset; 	// Offset of occlusion mesh triangle data.
+}
+</pre>
+
+The header contains two structs within it - the bounding sphere and bounding box.
+<pre lang="c">
+struct bsphere
+{
+	float x;	
+	float y;
+	float z;
+	float radius;
+}
+struct bbox
+{
+	float minX;
+	float minY;
+	float minZ;
+	float maxX;
+	float maxY;
+	float maxZ;
+}
+</pre>
+
+=== Vertex Data ===
+To read each attribute, jump to the position defined in the header, and read <pre>numVertices</pre> vertices from the data.
+
+World coordinates, as pointed to by the worldOffset int in the header:
+<pre lang="c">
+struct world_coordinate
+{
+	float x;
+	float y;
+	float z;
+}
+</pre>
+
+Texture coordinates, as pointed to by the texOffset int in the header:
+<pre lang="c">
+struct texture_coordinate
+{
+	float u;
+	float v;
+}
+</pre>
+
+Vertex normals, as pointed to by the normalOffset int in the header:
+<pre lang="c">
+struct normal_vector
+{
+	float x;
+	float y;
+	float z;
+}
+</pre>
+Normals ''must'' be pre-normalized before they are exported.
+
+Vertex tangents, as pointed to by the tangentOffset int in the header:
+<pre lang="c">
+struct tangent_vector
+{
+	float x;
+	float y;
+	float z; 
+	float handedness;
+}
+</pre>
+Tangents ''must'' be pre-normalized before they are exported.
+
+=== Triangles & Meshes ===
+Triangles are pointed to in the triOffset int in the header. To read each triangle, jump to the offset and read <pre>numTriangles</pre> triangles.
+Each triangle contains three indices. 
+<pre lang="c">
+struct triangle
+{
+	int[3] indices;
+}
+</pre>
+
+Meshes are groups of triangles. To read each mesh, jump to the meshOffset value provided in the header and read <pre>numMeshes</pre> meshes.
+<pre lang="c">
+struct mesh
+{
+	int firstTriangle;  // Index of the first triangle in the mesh.
+	int numTriangles;   // Number of triangles in the mesh.
+	char[256] material; // Null-terminated UTF-8 material name string.
+}
+</pre>
+
+=== Collision ===
+Collision hull vertices are pointed to in the collisionOffset int in the header. To read each verteex, jump to the offset and read <pre>numCollisionVerts</pre> vertices.
+<pre lang="c">
+struct convex_hull_vertex
+{
+	float x;
+	float y;
+	float z;
+}
+</pre>
+
+Convex hulls are pointed to in the convexHullOffset int in the header. To read each hull, jump to the offset and read <pre>numConvexHulls</pre> hulls.
+<pre lang="c">
+struct convex_hull
+{
+	int firstVertex; // Index of first collison vertex in this hull.
+	int numVertices; // Number of collision vertices in this hull.
+}
+</pre>
+
+=== Occlusion Geometry ===
+The occlusion geometry contained in each model is a low quality version of each mesh. This can be useful for a variety of purposes. 
+
+Occlusion mesh vertices are pointed to in the occVertOffset int in the header. To read each verteex, jump to the offset and read <pre>numOccVerts</pre> vertices.
+<pre lang="c">
+struct occlusion_mesh_vertex
+{
+	float x;
+	float y;
+	float z;
+}
+</pre>
+
+Occlusion mesh triangles are pointed to in the occTriangleOffset int in the header. To read each hull, jump to the offset and read <pre>numOccTriangles</pre> hulls.
+<pre lang="c">
+struct occlusion_mesh_triangle
+{
+	int[3] indices;
+}
+</pre>
+
+== Extensions ==
+The BSM format allows for extensions. However, all extensions (all compliant extensions, at least) must be backwards compatible with the version they extend from.
+
+If you extend the format, you must keep the version number the same as the one you are extending from, and keep the header the same (though you may add on to the header or add a secondary header after it). In addition, you should change the extensionID field to a value that uniquely identifies your extension, and is not zero (zero is reserved for the core format). You may want to use a magic number or another unique identifier, as long as it fits in 4 bytes.
+
+== Examples ==
+An example implementation can be found on the official GitHub repo for the Binary Static Mesh format: https://github.com/ml32/Binary-Static-Mesh
+A reference implementation can be found within bsm.c and bsm.h, as well as in the "examples" directory and the "exporters" directory.
+An example BSM model can be downloaded from "test.bsm". It is licensed under the GPL, as it is part of the Blender project (it is the test model, Suzanne).
+
+== Offical Specification ==
+The official specification can be found [https://github.com/ml32/Binary-Static-Mesh/raw/master/spec/BSM_spec_v1_DRAFT.pdf here] in PDF format, or [https://raw.github.com/ml32/Binary-Static-Mesh/master/spec/BSM_spec_v1_DRAFT.tex here], in LaTeX.
