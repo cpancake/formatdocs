@@ -9,82 +9,87 @@ __TOC__
 
 == Basic Data Types ==
 
-{| 
-  ! Name
-  ! Value
-  ! Size
-  ! Notes
- |-
-  | bool/boolean
-  | true/false
-  | 1 byte
-  |
- |-
-  | byte / unsigned byte
-  | 0 to 255
-  | 1 byte
-  |
- |-
-  | sbyte / signed byte
-  | -127 to 127
-  | 1 byte
-  |
- |-
-  | char / unsigned char
-  | 0 to 255
-  | 1 byte
-  | Denotes an unsigned byte that contains one character.
- |-
-  | schar / signed char
-  | -127 to 127
-  | 1 byte
-  | Denotes a signed byte that contains one character.
- |-
-  | short / signed short
-  | -32,768 to 32,767
-  | 2 bytes
-  |
- |-
-  | ushort / unsigned short
-  | 0 to 65,535
-  | 2 bytes
-  |
- |-
-  | int / signed int
-  | -2,147,483,648 to 2,147,483,647
-  | 4 bytes
-  |
- |-
-  | uint / unsigned int
-  | 0 to 4,294,967,295
-  | 4 bytes
-  |
- |-
-  | long / signed long
-  | −9,223,372,036,854,775,808 to 9,223,372,036,854,775,807
-  | 8 bytes
-  |
- |-
-  | ulong / unsigned long
-  | 0 to 18,446,744,073,709,551,615
-  | 8 bytes
-  |
- |- 
-  | float
-  | Single-precision floating-point number (IEEE 754)
-  | 4 bytes
-  |
- |-
-  | double
-  | Double-precision floating-point number (IEEE 754)
-  | 8 bytes
-  |
- |-
-  | string
-  | Null-terminated sequence of characters.
-  | Varies
-  | When used, it should be noted what encoding the text is in (ASCII, UCS2, UTF-8, etc)
-|}
+<table>
+ <tr>
+  <th>Name</th>
+  <th>Value</th>
+  <th>Size</th>
+  <th>Notes</th>
+ </tr>
+ <tr>
+  <td>bool/boolean</td>
+  <td>true/false</td>
+  <td>1 byte</td>
+ </tr>
+  <tr>
+  <td>byte / unsigned byte</td>
+  <td>0 to 255</td>
+  <td>1 byte</td>
+ </tr>
+  <tr>
+  <td>sbyte / signed byte</td>
+  <td>-127 to 127</td>
+  <td>1 byte</td>
+ </tr>
+  <tr>
+  <td>char / unsigned char</td>
+  <td>0 to 255</td>
+  <td>1 byte</td>
+  <td>Denotes an unsigned byte that contains one character.</td>
+ </tr>
+  <tr>
+  <td>schar / signed char</td>
+  <td>-127 to 127</td>
+  <td>1 byte</td>
+  <td>Denotes a signed byte that contains one character.</td>
+ </tr>
+  <tr>
+  <td>short / signed short</td>
+  <td>-32,768 to 32,767</td>
+  <td>2 bytes</td>
+ </tr>
+  <tr>
+  <td>ushort / unsigned short</td>
+  <td>0 to 65,535</td>
+  <td>2 bytes</td>
+ </tr>
+  <tr>
+  <td>int / signed int</td>
+  <td>-2,147,483,648 to 2,147,483,647</td>
+  <td>4 bytes</td>
+ </tr>
+  <tr>
+  <td>uint / unsigned int</td>
+  <td>0 to 4,294,967,295</td>
+  <td>4 bytes</td>
+ </tr>
+  <tr>
+  <td>long / signed long</td>
+  <td>−9,223,372,036,854,775,808 to 9,223,372,036,854,775,807</td>
+  <td>8 bytes</td>
+ </tr>
+  <tr>
+  <td>ulong / unsigned long</td>
+  <td>0 to 18,446,744,073,709,551,615</td>
+  <td>8 bytes</td>
+ </tr>
+  <tr> 
+  <td>float</td>
+  <td>Single-precision floating-point number (IEEE 754)</td>
+  <td>4 bytes</td>
+ </tr>
+  <tr>
+  <td>double</td>
+  <td>Double-precision floating-point number (IEEE 754)</td>
+  <td>8 bytes</td>
+ </tr>
+  <tr>
+  <td>string</td>
+  <td>Null-terminated sequence of characters.</td>
+  <td>Varies</td>
+  <td>When used, it should be noted what encoding the text is in (ASCII, UCS2, UTF-8, etc)</td>
+ </tr>
+</table>
 
 == Arrays ==
 Arrays should be written in the following notation:
