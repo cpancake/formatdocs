@@ -191,9 +191,13 @@ The BSM format allows for extensions. However, all extensions (all compliant ext
 If you extend the format, you must keep the version number the same as the one you are extending from, and keep the header the same (though you may add on to the header or add a secondary header after it). In addition, you should change the extensionID field to a value that uniquely identifies your extension, and is not zero (zero is reserved for the core format). You may want to use a magic number or another unique identifier, as long as it fits in 4 bytes.
 
 == Examples ==
-An example implementation can be found on the official GitHub repo for the Binary Static Mesh format: https://github.com/ml32/Binary-Static-Mesh
+An example implementation can be found on the official GitHub repo for the Binary Static Mesh format.
+
 A reference implementation can be found within bsm.c and bsm.h, as well as in the "examples" directory and the "exporters" directory.
-An example BSM model can be downloaded from "test.bsm". It is licensed under the GPL, as it is part of the Blender project (it is the test model, Suzanne).
+An example BSM model can be downloaded from "test.bsm". It is licensed under the GPL, as it is part of the Blender project (it is the Blender test model, Suzanne).
 
 == Offical Specification ==
 The official specification can be found [https://github.com/ml32/Binary-Static-Mesh/raw/master/spec/BSM_spec_v1_DRAFT.pdf here] in PDF format, or [https://raw.github.com/ml32/Binary-Static-Mesh/master/spec/BSM_spec_v1_DRAFT.tex here], in LaTeX.
+
+== External Links ==
+* [https://github.com/ml32/Binary-Static-Mesh Offical GitHub Repository]
