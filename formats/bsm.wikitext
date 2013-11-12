@@ -4,7 +4,7 @@
  - @slugs Binary_Static_Mesh BSM
  --->
 
-Binary Static Mesh is a file format designed for storing static meshes in an easy and fast format. It was designed by Facepunch user ROBO_DONUT as an easy to use alternative to [[Wavefront_OBJ]].
+Binary Static Mesh is a file format designed for storing static meshes in an easy and fast format. It was designed by Facepunch user ROBO_DONUT as an easy to use alternative to [[Wavefront OBJ]].
 
 The BSM format is currently in the draft stage of version 1. However, all versions of the format must be backwards compatible with previous versions - a version 1 parser will still be able to read version 1 information from a version 2 file, if a second version is created.
 
@@ -57,6 +57,7 @@ struct bsm_header
 	int occTriangleOffset; 	// Offset of occlusion mesh triangle data.
 }
 </pre>
+It is important to note that all item counts and offsets will be greater or equal to zero.
 
 The header contains two structs within it - the bounding sphere and bounding box.
 <pre lang="c">
@@ -79,7 +80,7 @@ struct bbox
 </pre>
 
 === Vertex Data ===
-To read each attribute, jump to the position defined in the header, and read <pre>numVertices</pre> vertices from the data.
+To read each attribute, jump to the position defined in the header, and read `numVertices` vertices from the data.
 
 World coordinates, as pointed to by the worldOffset int in the header:
 <pre lang="c">
@@ -124,7 +125,7 @@ struct tangent_vector
 Tangents ''must'' be pre-normalized before they are exported.
 
 === Triangles & Meshes ===
-Triangles are pointed to in the triOffset int in the header. To read each triangle, jump to the offset and read <pre>numTriangles</pre> triangles.
+Triangles are pointed to in the triOffset int in the header. To read each triangle, jump to the offset and read `numTriangles` triangles.
 Each triangle contains three indices. 
 <pre lang="c">
 struct triangle
@@ -133,7 +134,7 @@ struct triangle
 }
 </pre>
 
-Meshes are groups of triangles. To read each mesh, jump to the meshOffset value provided in the header and read <pre>numMeshes</pre> meshes.
+Meshes are groups of triangles. To read each mesh, jump to the meshOffset value provided in the header and read `numMeshes` meshes.
 <pre lang="c">
 struct mesh
 {
@@ -144,7 +145,7 @@ struct mesh
 </pre>
 
 === Collision ===
-Collision hull vertices are pointed to in the collisionOffset int in the header. To read each verteex, jump to the offset and read <pre>numCollisionVerts</pre> vertices.
+Collision hull vertices are pointed to in the collisionOffset int in the header. To read each verteex, jump to the offset and read `numCollisionVerts` vertices.
 <pre lang="c">
 struct convex_hull_vertex
 {
@@ -154,7 +155,7 @@ struct convex_hull_vertex
 }
 </pre>
 
-Convex hulls are pointed to in the convexHullOffset int in the header. To read each hull, jump to the offset and read <pre>numConvexHulls</pre> hulls.
+Convex hulls are pointed to in the convexHullOffset int in the header. To read each hull, jump to the offset and read `numConvexHulls` hulls.
 <pre lang="c">
 struct convex_hull
 {
@@ -166,7 +167,7 @@ struct convex_hull
 === Occlusion Geometry ===
 The occlusion geometry contained in each model is a low quality version of each mesh. This can be useful for a variety of purposes. 
 
-Occlusion mesh vertices are pointed to in the occVertOffset int in the header. To read each verteex, jump to the offset and read <pre>numOccVerts</pre> vertices.
+Occlusion mesh vertices are pointed to in the occVertOffset int in the header. To read each verteex, jump to the offset and read `numOccVerts` vertices.
 <pre lang="c">
 struct occlusion_mesh_vertex
 {
@@ -176,7 +177,7 @@ struct occlusion_mesh_vertex
 }
 </pre>
 
-Occlusion mesh triangles are pointed to in the occTriangleOffset int in the header. To read each hull, jump to the offset and read <pre>numOccTriangles</pre> hulls.
+Occlusion mesh triangles are pointed to in the occTriangleOffset int in the header. To read each hull, jump to the offset and read `numOccTriangles` hulls.
 <pre lang="c">
 struct occlusion_mesh_triangle
 {
