@@ -5,6 +5,8 @@
 
 To remain consistent across formats, to alleviate confusion, and to avoid redundancy, this page lists all the standard data types that will be used across formats. This page does not list data types that are unique to one format or a group of formats.
 
+__TOC__
+
 == Basic Data Types ==
 
 {| border=1 
@@ -79,8 +81,8 @@ Arrays should be written in the following notation:
 <pre>type[n] name;</pre>
 Arrays are, unless noted, contiguous; that means that if you read ''n'' values of ''type'' from the format, you'd get the proper data.
 
-== Why <pre>long</pre>? ==
-<pre>long is used as the name for a 64 bit integer for several reasons:</pre>
+== Why `long`? ==
+`long` is used as the name for a 64 bit integer for several reasons:
 * It's not used anywhere else on the table.
 * There is no consistent naming for a 64 bit integer across platforms.
 * It makes sense for Java or C# developers.

@@ -8,6 +8,8 @@ Binary Static Mesh is a file format designed for storing static meshes in an eas
 
 The BSM format is currently in the draft stage of version 1. However, all versions of the format must be backwards compatible with previous versions - a version 1 parser will still be able to read version 1 information from a version 2 file, if a second version is created.
 
+__TOC__
+
 == Format ==
 All BSM files include the following data (though not neccesarily in this order):
 <pre>
@@ -30,7 +32,7 @@ Convex hull and occlusion mesh information is contained in every file, however, 
 
 === Header ===
 The header is at the beginning of every BSM file. It contains the following data:
-<pre lang="c">
+<source lang="c">
 struct bsm_header 
 {
 	char[16] magic;         // Magic number - 'BINARYSTATICMESH'
@@ -56,11 +58,11 @@ struct bsm_header
 	int numOccTriangles;	// Number of occlusion mesh triangles.
 	int occTriangleOffset; 	// Offset of occlusion mesh triangle data.
 }
-</pre>
+</source>
 It is important to note that all item counts and offsets will be greater or equal to zero.
 
 The header contains two structs within it - the bounding sphere and bounding box.
-<pre lang="c">
+<source lang="c">
 struct bsphere
 {
 	float x;	
@@ -77,43 +79,43 @@ struct bbox
 	float maxY;
 	float maxZ;
 }
-</pre>
+</source>
 
 === Vertex Data ===
 To read each attribute, jump to the position defined in the header, and read `numVertices` vertices from the data.
 
 World coordinates, as pointed to by the worldOffset int in the header:
-<pre lang="c">
+<source lang="c">
 struct world_coordinate
 {
 	float x;
 	float y;
 	float z;
 }
-</pre>
+</source>
 
 Texture coordinates, as pointed to by the texOffset int in the header:
-<pre lang="c">
+<source lang="c">
 struct texture_coordinate
 {
 	float u;
 	float v;
 }
-</pre>
+</source>
 
 Vertex normals, as pointed to by the normalOffset int in the header:
-<pre lang="c">
+<source lang="c">
 struct normal_vector
 {
 	float x;
 	float y;
 	float z;
 }
-</pre>
+</source>
 Normals ''must'' be pre-normalized before they are exported.
 
 Vertex tangents, as pointed to by the tangentOffset int in the header:
-<pre lang="c">
+<source lang="c">
 struct tangent_vector
 {
 	float x;
@@ -121,69 +123,69 @@ struct tangent_vector
 	float z; 
 	float handedness;
 }
-</pre>
+</source>
 Tangents ''must'' be pre-normalized before they are exported.
 
 === Triangles & Meshes ===
 Triangles are pointed to in the triOffset int in the header. To read each triangle, jump to the offset and read `numTriangles` triangles.
 Each triangle contains three indices. 
-<pre lang="c">
+<source lang="c">
 struct triangle
 {
 	int[3] indices;
 }
-</pre>
+</source>
 
 Meshes are groups of triangles. To read each mesh, jump to the meshOffset value provided in the header and read `numMeshes` meshes.
-<pre lang="c">
+<source lang="c">
 struct mesh
 {
 	int firstTriangle;  // Index of the first triangle in the mesh.
 	int numTriangles;   // Number of triangles in the mesh.
 	char[256] material; // Null-terminated UTF-8 material name string.
 }
-</pre>
+</source>
 
 === Collision ===
 Collision hull vertices are pointed to in the collisionOffset int in the header. To read each verteex, jump to the offset and read `numCollisionVerts` vertices.
-<pre lang="c">
+<source lang="c">
 struct convex_hull_vertex
 {
 	float x;
 	float y;
 	float z;
 }
-</pre>
+</source>
 
 Convex hulls are pointed to in the convexHullOffset int in the header. To read each hull, jump to the offset and read `numConvexHulls` hulls.
-<pre lang="c">
+<source lang="c">
 struct convex_hull
 {
 	int firstVertex; // Index of first collison vertex in this hull.
 	int numVertices; // Number of collision vertices in this hull.
 }
-</pre>
+</source>
 
 === Occlusion Geometry ===
 The occlusion geometry contained in each model is a low quality version of each mesh. This can be useful for a variety of purposes. 
 
 Occlusion mesh vertices are pointed to in the occVertOffset int in the header. To read each verteex, jump to the offset and read `numOccVerts` vertices.
-<pre lang="c">
+<source lang="c">
 struct occlusion_mesh_vertex
 {
 	float x;
 	float y;
 	float z;
 }
-</pre>
+</source>
 
 Occlusion mesh triangles are pointed to in the occTriangleOffset int in the header. To read each hull, jump to the offset and read `numOccTriangles` hulls.
-<pre lang="c">
+<source lang="c">
 struct occlusion_mesh_triangle
 {
 	int[3] indices;
 }
-</pre>
+</source>
 
 == Extensions ==
 The BSM format allows for extensions. However, all extensions (all compliant extensions, at least) must be backwards compatible with the version they extend from.
